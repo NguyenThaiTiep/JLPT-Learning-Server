@@ -5,7 +5,7 @@ var ExamsModel = require('./../model/modelExam')
 
 /* GET users listing. */
 router.get('/', ExamsModel.getAll);
-router.get('/exam/:id', ExamsModel.getUserById);
+router.get('/exam/:id', ExamsModel.getExamById);
 
 router.post('/', ExamsModel.update);
 module.exports = router;

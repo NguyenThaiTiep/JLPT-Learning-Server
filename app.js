@@ -12,6 +12,8 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var practiceRouter = require('./routes/practice');
 var examsRouter = require('./routes/Exams');
+var authRouter = require('./routes/auth')
+
 var db = require('./Database');
 
 var app = express();
@@ -31,7 +33,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 
-app.use('/', indexRouter);
+app.use('/', authRouter);
 app.use('/users', usersRouter);
 app.use('/exams', examsRouter);
 app.use('/practice', practiceRouter);
