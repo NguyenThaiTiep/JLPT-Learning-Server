@@ -46,7 +46,7 @@ module.exports.add = (req, res) => {
     var type = body.type;
 
     var qr = "INSERT INTO " + type + "practice(`id`, `level`) VALUES (NULL, \'" + level + "\')";
-    console.log(qr);
+
     db.query(qr, function(err, result) {
         if (err) throw err;
         else {
