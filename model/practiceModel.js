@@ -9,7 +9,7 @@ module.exports.getPracticeById = (req, res) => {
     if (levels.indexOf(level) == -1) res.send("level invalid");
     if (types.indexOf(type) == -1) res.send("type invalid");
     else {
-        var qr = "SELECT * FROM questionPractice AS T WHERE T.level =\'" + level + "\' AND T.type = \'" + type + "\' AND T.idRLG = \'" + id + "\'";
+        var qr = "SELECT * FROM questionpractice AS T WHERE T.level =\'" + level + "\' AND T.type = \'" + type + "\' AND T.idRLG = \'" + id + "\'";
         console.log(qr);
         db.query(qr, function(err, result) {
             if (err) throw err;
@@ -46,6 +46,7 @@ module.exports.add = (req, res) => {
     var type = body.type;
 
     var qr = "INSERT INTO " + type + "practice(`id`, `level`) VALUES (NULL, \'" + level + "\')";
+    console.log(qr);
     db.query(qr, function(err, result) {
         if (err) throw err;
         else {
@@ -59,7 +60,7 @@ module.exports.add = (req, res) => {
         var row = 0;
         while (qs[row]) {
             var question = qs[row];
-            qr = "INSERT INTO questionPractice(`id`, `question`, `answer1`, `answer2`, `answer3`, `answer4`, `result`, `type`, `level`, `idRLG`)" +
+            qr = "INSERT INTO questionpractice(`id`, `question`, `answer1`, `answer2`, `answer3`, `answer4`, `result`, `type`, `level`, `idRLG`)" +
                 "VALUES (NULL, \'" + question.answer1 + "\'," +
                 "\'" + question.answer1 + "\'," +
                 "\'" + question.answer2 + "\'," +
@@ -95,7 +96,7 @@ module.exports.remove = (req, res) => {
         }
     })
 
-    qr = "DELETE FROM questionPractice WHERE idRLG = " + id;
+    qr = "DELETE FROM questionpractice WHERE idRLG = " + id;
     db.query(qr, function(err, result) {
         if (err) throw err;
         else {
