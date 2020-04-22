@@ -15,8 +15,8 @@ module.exports.getUserById = function(req, res) {
     })
 }
 module.exports.update = (req, res) => {
+    var id = req.params.id;
     var body = req.body;
-    var id = body.id;
     var name = body.name;
     var email = body.email;
     var password = md5(body.password);
@@ -30,8 +30,7 @@ module.exports.update = (req, res) => {
     db.query(qr, (err, result) => {
         if (err) throw err;
         else {
-            res.send();
-            ("update user's information")
+            res.send("update user's information")
         }
     })
 }

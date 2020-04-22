@@ -19,7 +19,7 @@
  
 ### User 
 1. GET : /users/:id : lấy thông tin người dùng theo id
-2. POST : /users/update : update thông tin người dùng
+2. PUT : /users/update : update thông tin người dùng
 3. POST : /users/checkPassword : kiểm tra mật khẩu người dùng có đúng k
 
 ### Exam
