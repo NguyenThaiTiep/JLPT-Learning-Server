@@ -105,7 +105,7 @@ module.exports.remove = (req, res) => {
     })
 }
 module.exports.getAllByLevel = (req, res) => {
-    var practice = []
+    var practice = {}
     var level = req.params.level;
 
     if (levels.indexOf(level) == -1) { res.send("level invalid"); return; }
@@ -137,7 +137,7 @@ module.exports.getAllByLevel = (req, res) => {
             if (err) throw err;
             else {
                 practice.kanji = JSON.parse(JSON.stringify(result));
-                console.log(practice);
+                res.send(practice);
             }
         })
     }
