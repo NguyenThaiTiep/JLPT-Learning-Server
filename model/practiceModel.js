@@ -32,6 +32,7 @@ module.exports.getAll = (req, res) => {
         var qr = "SELECT * FROM " + type + "practice AS T WHERE T.level =\'" + level + "\'";
         db.query(qr, function(err, result) {
             if (err) throw err;
+            if (result.length == 0) res.send("not found");
             else {
                 res.send(result);
             }
@@ -46,7 +47,7 @@ module.exports.add = (req, res) => {
     var type = body.type;
 
     var qr = "INSERT INTO " + type + "practice(`id`, `level`) VALUES (NULL, \'" + level + "\')";
-
+    console.log(qr);
     db.query(qr, function(err, result) {
         if (err) throw err;
         else {
@@ -79,6 +80,7 @@ module.exports.add = (req, res) => {
             })
             row++;
         }
+        res.send("add practice susses");
     }
 
 }
@@ -96,13 +98,15 @@ module.exports.remove = (req, res) => {
         }
     })
 
-    qr = "DELETE FROM questionpractice WHERE idRLG = " + id;
+    qr = "DELETE FROM questionpractice WHERE idRLG = \'" + id +
+        "\' AND type = \'" + type + "\'";
     db.query(qr, function(err, result) {
         if (err) throw err;
         else {
             console.log("Number of records deleted: " + result.affectedRows);
         }
     })
+    res.send("Delete success");
 }
 module.exports.getAllByLevel = (req, res) => {
     var practice = {}
