@@ -5,6 +5,6 @@ var userModel = require('./../model/userModel')
 
 /* GET users listing. */
 router.get('/:id', userModel.getUserById);
-router.post('/', userModel.update)
+router.post('/update', userModel.update)
 router.post('/checkPassword', userModel.checkPassWord)
 module.exports = router;

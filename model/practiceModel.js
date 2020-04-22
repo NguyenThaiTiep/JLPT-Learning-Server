@@ -110,6 +110,8 @@ module.exports.getAllByLevel = (req, res) => {
 
     if (levels.indexOf(level) == -1) { res.send("level invalid"); return; }
 
+
+    //get grammarPractice
     var qr = "SELECT * FROM grammarpractice AS T WHERE T.level =\'" + level + "\'";
     db.query(qr, function(err, result) {
         if (err) throw err;
