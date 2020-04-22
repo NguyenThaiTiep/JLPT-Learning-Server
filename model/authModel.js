@@ -53,7 +53,7 @@ module.exports.create = (req, res) => {
         console.log(qr);
         db.query(qr, (err, result) => {
             if (err) throw err;
-            console.log(result.affectedRows + " record(s) updated");
+            console.log(result.affectedRows + " record(s) add");
         })
     }
 }

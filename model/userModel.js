@@ -41,7 +41,6 @@ module.exports.checkPassWord = (req, res) => {
     var password = md5(body.password);
 
     var qr = "SELECT u.password FROM users AS u WHERE u.id = \'" + id + "\'";
-
     db.query(qr, (err, result) => {
         if (err) throw err;
         if (result.length == 0) {

@@ -104,3 +104,43 @@ module.exports.remove = (req, res) => {
         }
     })
 }
+module.exports.getAllByLevel = (req, res) => {
+    var practice = []
+    var level = req.params.level;
+
+    if (levels.indexOf(level) == -1) { res.send("level invalid"); return; }
+
+    var qr = "SELECT * FROM grammarpractice AS T WHERE T.level =\'" + level + "\'";
+    db.query(qr, function(err, result) {
+        if (err) throw err;
+        else {
+            practice.grammar = JSON.parse(JSON.stringify(result));
+            getVocabulary();
+
+        }
+    })
+
+    function getVocabulary() {
+        var qr = "SELECT * FROM vocabularypractice AS T WHERE T.level =\'" + level + "\'";
+        db.query(qr, function(err, result) {
+            if (err) throw err;
+            else {
+                practice.vocabulary = JSON.parse(JSON.stringify(result));
+                getKanji();
+            }
+        })
+    }
+
+    function getKanji() {
+        var qr = "SELECT * FROM kanjipractice AS T WHERE T.level =\'" + level + "\'";
+        db.query(qr, function(err, result) {
+            if (err) throw err;
+            else {
+                practice.kanji = JSON.parse(JSON.stringify(result));
+                console.log(practice);
+            }
+        })
+    }
+
+
+}
