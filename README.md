@@ -1,5 +1,8 @@
 # JLPT-Learning-Server
-
+### Run : 
+1. npm install
+2. tạo file .env và cài đặt biến môi trường(inbox Tiệp)
+3. Run: npm run dev
 ## Endpoint và các chức năng
 
 ### Practice : luyện tập
