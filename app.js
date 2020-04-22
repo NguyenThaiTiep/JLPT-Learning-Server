@@ -14,6 +14,7 @@ var usersRouter = require('./routes/users');
 var practiceRouter = require('./routes/practice');
 var examsRouter = require('./routes/Exams');
 var authRouter = require('./routes/auth')
+var uploadRouter = require('./routes/upload')
 
 var db = require('./Database');
 
@@ -39,7 +40,7 @@ app.use('/users', usersRouter);
 app.use('/exams', examsRouter);
 app.use('/practice', practiceRouter);
 app.use('/charts', examsRouter);
-
+app.use('/upload', uploadRouter)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
