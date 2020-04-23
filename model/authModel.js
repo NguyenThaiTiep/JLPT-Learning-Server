@@ -12,7 +12,7 @@ const generateToken = (id) => {
     }, 'secret', { expiresIn: 60 * 60 });
 
 }
-module.exports.login = async(req, res) => {
+module.exports.login = (req, res) => {
     // var body = req.body;
     // var email = body.email;
     // var password = md5(body.password);
@@ -23,7 +23,7 @@ module.exports.login = async(req, res) => {
     //     status: "fail"
     // })
 
-    var token = generateToken(result.id);
+    var token = generateToken("123");
     ls.set("tokenId", token)
     res.json({
         status: "ok",
