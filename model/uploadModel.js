@@ -38,7 +38,10 @@ module.exports.getFile = (req, res) => {
     var tail = img.split('.').pop();
     var content_type = type + "/" + tail;
     fs.readFile(img, (err, imgData) => {
-        if (err) throw err;
+        if (err) {
+            res.send("file invalid");
+            return;
+        };
         res.writeHead(200, { 'Content-Type': content_type });
         res.end(imgData);
     })
