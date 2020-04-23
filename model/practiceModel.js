@@ -1,8 +1,11 @@
 const db = require('./../Database')
+const util = require('util');
+
+var queryFunc = util.promisify(db.query).bind(db);
 
 const levels = ['N1', 'N2', 'N3', 'N4', 'N5'];
 const types = ['vocabulary', 'grammar', 'kanji']
-module.exports.getPracticeById = (req, res) => {
+module.exports.getPracticeById = async(req, res) => {
     var type = req.params.type;
     var level = req.params.level;
     var id = req.params.id;
@@ -10,54 +13,39 @@ module.exports.getPracticeById = (req, res) => {
     if (types.indexOf(type) == -1) res.send("type invalid");
     else {
         var qr = "SELECT * FROM questionpractice AS T WHERE T.level =\'" + level + "\' AND T.type = \'" + type + "\' AND T.idRLG = \'" + id + "\'";
-        console.log(qr);
-        db.query(qr, function(err, result) {
-            if (err) throw err;
-            else {
-                res.send(result);
-            }
-        })
-
+        var practice = await queryFunc(qr);
+        res.send(practice);
     }
-
 }
-module.exports.getAll = (req, res) => {
+module.exports.getAll = async(req, res) => {
     var type = req.params.type;
     var level = req.params.level;
 
     if (levels.indexOf(level) == -1) res.send("level invalid");
     if (types.indexOf(type) == -1) res.send("type invalid");
     else {
-
         var qr = "SELECT * FROM " + type + "practice AS T WHERE T.level =\'" + level + "\'";
-        db.query(qr, function(err, result) {
-            if (err) throw err;
-            if (result.length == 0) res.send("not found");
-            else {
-                res.send(result);
-            }
-        })
-
+        var rows = await queryFunc(qr);
+        var result = (rows.length == 0) ? "Not Found practice" : rows;
+        res.send(result);
     }
 }
 
-module.exports.add = (req, res) => {
+module.exports.add = async(req, res) => {
     var body = req.body;
     var level = body.level;
     var type = body.type;
 
     var qr = "INSERT INTO " + type + "practice(`id`, `level`) VALUES (NULL, \'" + level + "\')";
-    console.log(qr);
-    db.query(qr, function(err, result) {
-        if (err) throw err;
-        else {
-            console.log(result.affectedRows + " record(s) updated");
-            addQuestion(result.insertId);
-        }
-    })
+    var practiceRow = await queryFunc(qr);
 
-    function addQuestion(idRLG) {
+    var idRLG = practiceRow.insertId;
+    var rs = await add(idRLG);
+    res.send(JSON.parse(JSON.stringify(rs)));
+
+    function add(idRLG) {
         var qs = body.question;
+        if (qs.length === 0) return ("No question add to database")
         var row = 0;
         while (qs[row]) {
             var question = qs[row];
@@ -72,81 +60,42 @@ module.exports.add = (req, res) => {
                 "\'" + level + "\'," +
                 "\'" + idRLG + "\'" +
                 ")";
-            db.query(qr, function(err, result) {
-                if (err) throw err;
-                else {
-                    console.log(result.affectedRows + " record(s) updated");
-                }
-            })
+            var result = queryFunc(qr);
             row++;
         }
-        res.send("add practice susses");
+        return "success";
     }
-
 }
-module.exports.remove = (req, res) => {
+module.exports.remove = async(req, res) => {
     var body = req.body;
     var id = body.id;
     var type = body.type;
 
     // xoa practice
     var qr = "DELETE FROM " + type + "practice WHERE id = " + id;
-    db.query(qr, function(err, result) {
-        if (err) throw err;
-        else {
-            console.log("Number of records deleted: " + result.affectedRows);
-        }
-    })
-
+    var DeletePractice = await queryFunc(qr);
     qr = "DELETE FROM questionpractice WHERE idRLG = \'" + id +
         "\' AND type = \'" + type + "\'";
-    db.query(qr, function(err, result) {
-        if (err) throw err;
-        else {
-            console.log("Number of records deleted: " + result.affectedRows);
-        }
-    })
+    var DeleteQuestion = await queryFunc(qr);
     res.send("Delete success");
 }
-module.exports.getAllByLevel = (req, res) => {
+module.exports.getAllByLevel = async(req, res) => {
     var practice = {}
     var level = req.params.level;
-
     if (levels.indexOf(level) == -1) { res.send("level invalid"); return; }
 
-
     //get grammarPractice
-    var qr = "SELECT * FROM grammarpractice AS T WHERE T.level =\'" + level + "\'";
-    db.query(qr, function(err, result) {
-        if (err) throw err;
-        else {
-            practice.grammar = JSON.parse(JSON.stringify(result));
-            getVocabulary();
+    var qrG = "SELECT * FROM grammarpractice AS T WHERE T.level =\'" + level + "\'";
+    var grammarPractice = await queryFunc(qrG);
 
-        }
-    })
+    var qrV = "SELECT * FROM vocabularypractice AS T WHERE T.level =\'" + level + "\'";
+    var VocabularyPractice = await queryFunc(qrV);
 
-    function getVocabulary() {
-        var qr = "SELECT * FROM vocabularypractice AS T WHERE T.level =\'" + level + "\'";
-        db.query(qr, function(err, result) {
-            if (err) throw err;
-            else {
-                practice.vocabulary = JSON.parse(JSON.stringify(result));
-                getKanji();
-            }
-        })
-    }
+    var qrK = "SELECT * FROM kanjipractice AS T WHERE T.level =\'" + level + "\'";
+    var KanjiPractice = await queryFunc(qrK);
 
-    function getKanji() {
-        var qr = "SELECT * FROM kanjipractice AS T WHERE T.level =\'" + level + "\'";
-        db.query(qr, function(err, result) {
-            if (err) throw err;
-            else {
-                practice.kanji = JSON.parse(JSON.stringify(result));
-                res.send(practice);
-            }
-        })
-    }
-
-
+    practice.kanji = KanjiPractice;
+    practice.vocabulary = VocabularyPractice;
+    practice.grammar = grammarPractice;
+    res.send(practice);
 }

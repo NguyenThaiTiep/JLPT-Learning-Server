@@ -1,20 +1,37 @@
 const db = require('./../Database')
+
+const ls = require('local-storage')
+const util = require('util');
+const jwt = require('jsonwebtoken')
 const md5 = require('md5');
 
-module.exports.login = (req, res) => {
-    var body = req.body;
-    var email = body.email;
-    var password = md5(body.password);
+const queryFunc = util.promisify(db.query).bind(db);
+const generateToken = (id) => {
+    return jwt.sign({
+        id
+    }, 'secret', { expiresIn: 60 * 60 });
 
-    var qr = "SELECT u.name FROM users AS u WHERE u.email =\'" + email + "\' AND  u.password = \'" + password + "\'";
-    db.query(qr, (err, result) => {
-        if (err) throw err;
-        if (result.length > 0) {
-            res.send("login success");
-        } else {
-            res.send("invalid account");
-        }
+}
+module.exports.login = async(req, res) => {
+    // var body = req.body;
+    // var email = body.email;
+    // var password = md5(body.password);
+
+    // var qr = "SELECT u.name FROM users AS u WHERE u.email =\'" + email + "\' AND  u.password = \'" + password + "\'";
+    // var result = await queryFunc(qr);
+    // if (result.length === 0) res.json({
+    //     status: "fail"
+    // })
+
+    var token = generateToken(result.id);
+    ls.set("tokenId", token)
+    res.json({
+        status: "ok",
+        token
     })
+}
+module.exports.logout = (req, res) => {
+
 }
 module.exports.create = (req, res) => {
     var errArr = [];
