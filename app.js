@@ -40,7 +40,7 @@ app.use('/users', usersRouter);
 app.use('/exams', examsRouter);
 app.use('/practice', practiceRouter);
 app.use('/charts', examsRouter);
-app.use('/upload', uploadRouter)
+app.use('/file', uploadRouter)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -7,7 +7,7 @@ router.use(json())
 var uploadModel = require('./../model/uploadModel')
 var isLogin = require('./../model/authModel').checkLogin;
 
-router.post('/img', isLogin, uploadModel.uploadImg);
-// router.get('/img/:id', uploadModel.getImg);
+router.post('/', isLogin, uploadModel.uploadFile);
+router.get('/:type/:name', uploadModel.getFile);
 
 module.exports = router;

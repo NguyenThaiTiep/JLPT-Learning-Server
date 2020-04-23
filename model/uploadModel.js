@@ -1,7 +1,8 @@
 const db = require('./../Database')
 const formidable = require('formidable');
+const fs = require('fs');
 
-module.exports.uploadImg = (req, res) => {
+module.exports.uploadFile = async(req, res) => {
     var form = new formidable.IncomingForm();
     form.uploadDir = "public/images";
     form.keepExtensions = true;
@@ -19,16 +20,27 @@ module.exports.uploadImg = (req, res) => {
         var imgs = files[""];
 
         var fileNames = [];
-        if (imgs.length > 0) {
+
+        if (imgs.path) fileNames.push(imgs.path.split("\\").pop())
+        if (imgs.length >= 0) {
             imgs.forEach(eachFile => {
-                fileNames.push(eachFile)
+                fileNames.push(eachFile.path.split("\\").pop())
             });
-        } else {
-            res.json({
-                result: "ok",
-                data: fileNames,
-                message: "upload images successfully"
-            })
         }
+        res.json({
+            fileNames
+        })
+    })
+}
+module.exports.getFile = (req, res) => {
+    var img = "public/images/" + req.params.name;
+    var type = req.params.type;
+    var tail = img.split('.').pop();
+    var content_type = type + "/" + tail;
+    console.log(content_type)
+    fs.readFile(img, (err, imgData) => {
+        if (err) throw err;
+        res.writeHead(200, { 'Content-Type': content_type });
+        res.end(imgData);
     })
 }

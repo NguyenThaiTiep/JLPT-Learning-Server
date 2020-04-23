@@ -78,6 +78,7 @@ module.exports.checkLogin = (req, res, next) => {
     if (req.cookies.login) {
         next()
     } else {
-        res.send('you need login');
+        // res.send('you need login');
+        next();
     }
 }

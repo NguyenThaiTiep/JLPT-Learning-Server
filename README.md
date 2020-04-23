@@ -22,7 +22,8 @@
 2. PUT : /users/update : update thông tin người dùng
 3. POST : /users/checkPassword : kiểm tra mật khẩu người dùng có đúng k
 ### Upload
-1. POST : /upload/img : upload 1 ảnh
+1. POST : /file : upload 1 file
+2. GET: /file/:type/:name : lay 1 file có kiểu type(video/radio/image), và có tên name
 ### Exam
 
 ### Admin
