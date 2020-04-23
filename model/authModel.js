@@ -1,6 +1,5 @@
 const db = require('./../Database')
 
-const ls = require('local-storage')
 const util = require('util');
 const jwt = require('jsonwebtoken')
 const md5 = require('md5');
@@ -24,14 +23,23 @@ module.exports.login = (req, res) => {
     // })
 
     var token = generateToken("123");
-    ls.set("tokenId", token)
+
+    const cookieOptions = {
+        expires: new Date(
+            Date.now() + process.env.JWT_EXPIRED_IN * 24 * 60 * 60 * 1000
+        ),
+        httpOnly: true
+    }
+
+    res.cookie('jwt', token, cookieOptions);
+
     res.json({
         status: "ok",
         token
     })
 }
 module.exports.logout = (req, res) => {
-
+    console.log(req.cookie);
 }
 module.exports.create = (req, res) => {
     var errArr = [];
