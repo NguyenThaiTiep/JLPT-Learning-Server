@@ -11,37 +11,38 @@ const generateToken = (id) => {
     }, 'secret', { expiresIn: 60 * 60 });
 
 }
-module.exports.login = (req, res) => {
-    // var body = req.body;
-    // var email = body.email;
-    // var password = md5(body.password);
+module.exports.login = async(req, res) => {
+    var body = req.body;
+    var email = body.email;
+    var password = md5(body.password);
 
-    // var qr = "SELECT u.name FROM users AS u WHERE u.email =\'" + email + "\' AND  u.password = \'" + password + "\'";
-    // var result = await queryFunc(qr);
-    // if (result.length === 0) res.json({
-    //     status: "fail"
-    // })
+    var qr = "SELECT u.name FROM users AS u WHERE u.email =\'" + email + "\' AND  u.password = \'" + password + "\'";
+    var result = await queryFunc(qr);
+    if (result.length === 0) res.json({
+        status: "fail"
+    })
 
-    var token = generateToken("123");
+    var token = generateToken(result.id);
 
     const cookieOptions = {
         expires: new Date(
-            Date.now() + process.env.JWT_EXPIRED_IN * 24 * 60 * 60 * 1000
+            Date.now() + 24 * 24 * 60 * 60 * 1000
         ),
         httpOnly: true
     }
 
-    res.cookie('jwt', token, cookieOptions);
+    res.cookie('login', token, cookieOptions);
 
     res.json({
         status: "ok",
-        token
+        cookie: token
     })
 }
-module.exports.logout = (req, res) => {
-    console.log(req.cookie);
+module.exports.logout = async(req, res) => {
+    res.clearCookie("login");
+    res.send("redirect login");
 }
-module.exports.create = (req, res) => {
+module.exports.create = async(req, res) => {
     var errArr = [];
     var body = req.body;
     var name = body.name;
@@ -62,23 +63,21 @@ module.exports.create = (req, res) => {
         return;
     }
     var qr = "SELECT u.name FROM users AS u WHERE u.email =\'" + email + "\'";
-    db.query(qr, (err, result) => {
-        if (err) throw err;
-        if (result.length > 0) {
-            res.send("Account already exists");
-        } else {
-            addUser();
-            res.send("created account success");
-        }
-    })
-
-    function addUser() {
-        var qr = "INSERT INTO `users` (`name`, `email`, `password`, `id`) VALUES ('" +
-            name + "\', \'" + email + "\', \'" + password + "\', NULL);";
-        console.log(qr);
-        db.query(qr, (err, result) => {
-            if (err) throw err;
-            console.log(result.affectedRows + " record(s) add");
-        })
+    var resultUser = await queryFunc(qr);
+    if (resultUser.length > 0) {
+        res.send("user already exists ");
+        return;
+    }
+    var qr = "INSERT INTO `users` (`name`, `email`, `password`, `id`) VALUES ('" +
+        name + "\', \'" + email + "\', \'" + password + "\', NULL);";
+    var user = await queryFunc(qr);
+    res.send("create user success");
+}
+module.exports.checkLogin = (req, res, next) => {
+    // console.log(req.cookies)
+    if (req.cookies.login) {
+        next()
+    } else {
+        res.send('you need login');
     }
 }
