@@ -48,14 +48,14 @@ module.exports.add = async(req, res) => {
         if (qs.length === 0) return ("No question add to database")
         var row = 0;
         while (qs[row]) {
-            var question = qs[row];
+            var questions = qs[row];
             qr = "INSERT INTO questionpractice(`id`, `question`, `answer1`, `answer2`, `answer3`, `answer4`, `result`, `type`, `level`, `idRLG`)" +
-                "VALUES (NULL, \'" + question.answer1 + "\'," +
-                "\'" + question.answer1 + "\'," +
-                "\'" + question.answer2 + "\'," +
-                "\'" + question.answer3 + "\'," +
-                "\'" + question.answer4 + "\'," +
-                "\'" + question.result + "\'," +
+                "VALUES (NULL, \'" + question.question + "\'," +
+                "\'" + questions.answer1 + "\'," +
+                "\'" + questions.answer2 + "\'," +
+                "\'" + questions.answer3 + "\'," +
+                "\'" + questions.answer4 + "\'," +
+                "\'" + questions.result + "\'," +
                 "\'" + type + "\'," +
                 "\'" + level + "\'," +
                 "\'" + idRLG + "\'" +

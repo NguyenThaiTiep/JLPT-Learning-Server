@@ -1,18 +1,18 @@
 const db = require('./../Database')
 const md5 = require('md5');
+const util = require('util');
 
+var queryFunc = util.promisify(db.query).bind(db);
 module.exports.getUserById = function(req, res) {
     var id = req.params.id;
     var qr = "SELECT * FROM users AS u WHERE u.id =\'" + id + "\'";
     console.log(qr);
-    db.query(qr, (err, result) => {
-        if (err) throw err;
-        if (result.length == 0) {
-            res.send("not found");
-        } else {
-            res.send(result);
-        }
-    })
+    var result = queryFunc(qr);
+    if (result.length == 0) {
+        res.send("not Found");
+        return;
+    }
+    res.send(result);
 }
 module.exports.update = (req, res) => {
     var id = req.params.id;
@@ -27,12 +27,8 @@ module.exports.update = (req, res) => {
         "password = \'" + password + "\' " +
         "WHERE " +
         "id = \'" + id + "\' ";
-    db.query(qr, (err, result) => {
-        if (err) throw err;
-        else {
-            res.send("update user's information")
-        }
-    })
+    var result = queryFunc(qr);
+    res.send('Update');
 }
 module.exports.checkPassWord = (req, res) => {
     var body = req.body;
