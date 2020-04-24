@@ -51,7 +51,7 @@ module.exports.add = async(req, res) => {
         while (qs[row]) {
             var questions = qs[row];
             qr = "INSERT INTO questionpractice(`id`, `question`, `answer1`, `answer2`, `answer3`, `answer4`, `result`, `type`, `level`, `idRLG`)" +
-                "VALUES (NULL, \'" + question.question + "\'," +
+                "VALUES (NULL, \'" + questions.question + "\'," +
                 "\'" + questions.answer1 + "\'," +
                 "\'" + questions.answer2 + "\'," +
                 "\'" + questions.answer3 + "\'," +
