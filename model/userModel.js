@@ -9,7 +9,7 @@ module.exports.getUserById = function(req, res) {
     console.log(qr);
     var result = queryFunc(qr);
     if (result.length == 0) {
-        res.send("not Found");
+        res.send({ status: "ok" });
         return;
     }
     res.send(result);

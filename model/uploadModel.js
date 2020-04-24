@@ -39,7 +39,7 @@ module.exports.getFile = (req, res) => {
     var content_type = type + "/" + tail;
     fs.readFile(img, (err, imgData) => {
         if (err) {
-            res.send("file invalid");
+            res.send({ status: "fail", message: "file invalid" });
             return;
         };
         res.writeHead(200, { 'Content-Type': content_type });
