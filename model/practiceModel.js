@@ -64,7 +64,7 @@ module.exports.add = async(req, res) => {
             var result = queryFunc(qr);
             row++;
         }
-        return { status: "oke", message: "success" };
+        return { status: "ok", message: "success" };
     }
 }
 module.exports.remove = async(req, res) => {
