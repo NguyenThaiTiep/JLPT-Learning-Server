@@ -9,8 +9,9 @@ module.exports.getPracticeById = async(req, res) => {
     var type = req.params.type;
     var level = req.params.level;
     var id = req.params.id;
-    if (levels.indexOf(level) == -1) res.send("level invalid");
-    if (types.indexOf(type) == -1) res.send("type invalid");
+
+    if (levels.indexOf(level) == -1) res.send({ status: "fail", message: "level invalid" });
+    if (types.indexOf(type) == -1) res.send({ status: "fail", message: "type invalid" });
     else {
         var qr = "SELECT * FROM questionpractice AS T WHERE T.level =\'" + level + "\' AND T.type = \'" + type + "\' AND T.idRLG = \'" + id + "\'";
         var practice = await queryFunc(qr);
@@ -21,12 +22,12 @@ module.exports.getAll = async(req, res) => {
     var type = req.params.type;
     var level = req.params.level;
 
-    if (levels.indexOf(level) == -1) res.send("level invalid");
-    if (types.indexOf(type) == -1) res.send("type invalid");
+    if (levels.indexOf(level) == -1) res.send({ status: "fail", message: "level invalid" });
+    if (types.indexOf(type) == -1) res.send({ status: "fail", message: "type invalid" });
     else {
         var qr = "SELECT * FROM " + type + "practice AS T WHERE T.level =\'" + level + "\'";
         var rows = await queryFunc(qr);
-        var result = (rows.length == 0) ? "Not Found practice" : rows;
+        var result = (rows.length == 0) ? { status: "fail", message: "Not Found practice" } : rows;
         res.send(result);
     }
 }
@@ -45,7 +46,7 @@ module.exports.add = async(req, res) => {
 
     function add(idRLG) {
         var qs = body.question;
-        if (qs.length === 0) return ("No question add to database")
+        if (qs.length === 0) return ({ status: "fail", message: "No question add to database" })
         var row = 0;
         while (qs[row]) {
             var questions = qs[row];
@@ -63,7 +64,7 @@ module.exports.add = async(req, res) => {
             var result = queryFunc(qr);
             row++;
         }
-        return "success";
+        return { status: "oke", message: "success" };
     }
 }
 module.exports.remove = async(req, res) => {
@@ -77,7 +78,7 @@ module.exports.remove = async(req, res) => {
     qr = "DELETE FROM questionpractice WHERE idRLG = \'" + id +
         "\' AND type = \'" + type + "\'";
     var DeleteQuestion = await queryFunc(qr);
-    res.send("Delete success");
+    res.send({ status: "oke" });
 }
 module.exports.getAllByLevel = async(req, res) => {
     var practice = {}
