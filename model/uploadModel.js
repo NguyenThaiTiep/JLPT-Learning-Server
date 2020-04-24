@@ -1,7 +1,7 @@
 const db = require('./../Database')
 const formidable = require('formidable');
 const fs = require('fs');
-
+const fileContent = ["image/jpg", "image/jpeg", "image/png", "ia"]
 module.exports.uploadFile = async(req, res) => {
     var form = new formidable.IncomingForm();
     form.uploadDir = "public/images";

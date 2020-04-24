@@ -12,15 +12,21 @@ const generateToken = (id) => {
 
 }
 module.exports.login = async(req, res) => {
+
     var body = req.body;
+    if (body.length == 0) res.json({ status: "fails" })
     var email = body.email;
     var password = md5(body.password);
 
+
     var qr = "SELECT u.name FROM users AS u WHERE u.email =\'" + email + "\' AND  u.password = \'" + password + "\'";
     var result = await queryFunc(qr);
-    if (result.length === 0) res.json({
-        status: "fail"
-    })
+    if (result.length === 0) {
+        res.json({
+            status: "fail"
+        })
+        return;
+    }
 
     var token = generateToken(result.id);
 
@@ -35,7 +41,7 @@ module.exports.login = async(req, res) => {
 
     res.json({
         status: "ok",
-        cookie: token
+        cookies: token
     })
 }
 module.exports.logout = async(req, res) => {
@@ -57,7 +63,6 @@ module.exports.create = async(req, res) => {
     if (!password) {
         errArr.push("invalid password");
     }
-    // var ERR = {errArr};
     if (errArr.length > 0) {
         res.send({ "err": errArr });
         return;
@@ -74,11 +79,9 @@ module.exports.create = async(req, res) => {
     res.send("create user success");
 }
 module.exports.checkLogin = (req, res, next) => {
-    // console.log(req.cookies)
     if (req.cookies.login) {
-        next()
-    } else {
-        // res.send('you need login');
         next();
+    } else {
+        res.send('you need login');
     }
 }
