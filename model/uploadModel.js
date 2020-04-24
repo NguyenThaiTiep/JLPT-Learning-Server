@@ -27,6 +27,7 @@ module.exports.uploadFile = async(req, res) => {
                 fileNames.push(eachFile.path.split("\\").pop())
             });
         }
+
         res.json({
             fileNames
         })

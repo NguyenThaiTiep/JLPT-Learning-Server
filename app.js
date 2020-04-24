@@ -62,5 +62,7 @@ app.use(function(err, req, res, next) {
     res.status(err.status || 500);
     res.render('error');
 });
-
-module.exports = app;
+var port = process.env.PORT || 8080;
+app.listen(port, () => {
+    console.log(`App listening on port ${port}`);
+});
