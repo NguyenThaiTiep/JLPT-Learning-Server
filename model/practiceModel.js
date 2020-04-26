@@ -13,7 +13,7 @@ module.exports.getPracticeById = async(req, res) => {
     if (levels.indexOf(level) == -1) res.send({ status: "fail", message: "level invalid" });
     if (types.indexOf(type) == -1) res.send({ status: "fail", message: "type invalid" });
     else {
-        var qr = "SELECT * FROM questionpractice AS T WHERE T.level =\'" + level + "\' AND T.type = \'" + type + "\' AND T.idRLG = \'" + id + "\'";
+        var qr = "SELECT * FROM questionpractice" + type + " AS T WHERE  T.idRLG = \'" + id + "\'";
         var practice = await queryFunc(qr);
         res.send(practice);
     }
@@ -41,24 +41,22 @@ module.exports.add = async(req, res) => {
     var practiceRow = await queryFunc(qr);
 
     var idRLG = practiceRow.insertId;
-    var rs = await add(idRLG);
+    var rs = await add(idRLG, type);
     res.send(JSON.parse(JSON.stringify(rs)));
 
-    function add(idRLG) {
+    function add(idRLG, type) {
         var qs = body.question;
         if (qs.length === 0) return ({ status: "fail", message: "No question add to database" })
         var row = 0;
         while (qs[row]) {
             var questions = qs[row];
-            qr = "INSERT INTO questionpractice(`id`, `question`, `answer1`, `answer2`, `answer3`, `answer4`, `result`, `type`, `level`, `idRLG`)" +
+            qr = "INSERT INTO questionpractice" + type + " (`id`, `question`, `answer1`, `answer2`, `answer3`, `answer4`, `result`, `idRLG`)" +
                 "VALUES (NULL, \'" + questions.question + "\'," +
                 "\'" + questions.answer1 + "\'," +
                 "\'" + questions.answer2 + "\'," +
                 "\'" + questions.answer3 + "\'," +
                 "\'" + questions.answer4 + "\'," +
                 "\'" + questions.result + "\'," +
-                "\'" + type + "\'," +
-                "\'" + level + "\'," +
                 "\'" + idRLG + "\'" +
                 ")";
             var result = queryFunc(qr);
@@ -75,18 +73,16 @@ module.exports.remove = async(req, res) => {
     // xoa practice
     var qr = "DELETE FROM " + type + "practice WHERE id = " + id;
     var DeletePractice = await queryFunc(qr);
-    qr = "DELETE FROM questionpractice WHERE idRLG = \'" + id +
-        "\' AND type = \'" + type + "\'";
-    var DeleteQuestion = await queryFunc(qr);
     res.send({ status: "oke" });
 }
 module.exports.getAllByLevel = async(req, res) => {
     var practice = {}
     var level = req.params.level;
+    var type = req.params.type;
     if (levels.indexOf(level) == -1) { res.send("level invalid"); return; }
-
+    if (types.indexOf(type) == -1) res.send({ status: "fail", message: "type invalid" });
     //get grammarPractice
-    var qrG = "SELECT * FROM grammarpractice AS T WHERE T.level =\'" + level + "\'";
+    var qrG = "SELECT * FROM grammarpractice" + type + " AS T WHERE T.level =\'" + level + "\'";
     var grammarPractice = await queryFunc(qrG);
 
     var qrV = "SELECT * FROM vocabularypractice AS T WHERE T.level =\'" + level + "\'";
