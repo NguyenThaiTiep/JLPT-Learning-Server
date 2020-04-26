@@ -3,8 +3,9 @@
 1. npm install
 2. tạo file .env và cài đặt biến môi trường(inbox Tiệp)
 3. Run: npm run dev
-## Endpoint và các chức năng
 ## DataBase EER : https://bit.ly/JLPT-EER-Database
+## Endpoint và các chức năng
+
 ### Practice : luyện tập
 1. GET : /practice/:level : lấy tất cả các practice có level là level
 2. GET : /practice/:level/:type : lấy tất cả các practice có level là level và id type là type(kanji,...)
