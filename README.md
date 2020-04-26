@@ -3,6 +3,7 @@
 1. npm install
 2. tạo file .env và cài đặt biến môi trường(inbox Tiệp)
 3. Run: npm run dev
+## DataBase EER : https://bit.ly/JLPT-EER-Database
 ## Endpoint và các chức năng
 
 ### Practice : luyện tập
@@ -25,5 +26,7 @@
 1. POST : /file : upload 1 file
 2. GET: /file/:type/:name : lay 1 file có kiểu type(video/radio/image), và có tên name
 ### Exam
-
+1. GET : /exams/exam/:id : lấy exam có id là id
+2. POST : /exams/add : tạo 1 exam mới
+3. DELETE : /exams/:id : xóa 1 exam có id là id
 ### Admin

@@ -1,0 +1,94 @@
+{
+    "level": "N5",
+    "grammar": [{
+            "title": "hihi",
+            "question": [{
+                    "question": "*先週*の木曜日　学校のとしょかんでレポートを書きました。",
+                    "answer1": "せんしゅ",
+                    "answer2": "さきしゅ",
+                    "answer3": "さきしゅう",
+                    "answer4": "せんしゅう",
+                    "result": "2"
+                },
+                {
+                    "question": "先にごはんを食べてください。わたしは*後で*食べます。",
+                    "answer1": "こうで",
+                    "answer2": "あとで",
+                    "answer3": "ごで",
+                    "answer4": "ので",
+                    "result": "2"
+                }
+            ]
+        },
+        {
+            "title": "hoho",
+            "question": [{
+                    "question": "*先週*の木曜日　学校のとしょかんでレポートを書きました。",
+                    "answer1": "せんしゅ",
+                    "answer2": "さきしゅ",
+                    "answer3": "さきしゅう",
+                    "answer4": "せんしゅう",
+                    "result": "1"
+                },
+                {
+                    "question": "先にごはんを食べてください。わたしは*後で*食べます。",
+                    "answer1": "こうで",
+                    "answer2": "あとで",
+                    "answer3": "ごで",
+                    "answer4": "ので",
+                    "result": "1"
+                }
+            ]
+        }
+    ],
+    "reading": [{
+            "title": "hehe",
+            "content": "leuleu",
+            "question": [{
+                    "question": "*先週*の木曜日　学校のとしょかんでレポートを書きました。",
+                    "answer1": "せんしゅ",
+                    "answer2": "さきしゅ",
+                    "answer3": "さきしゅう",
+                    "answer4": "せんしゅう",
+                    "result": "2"
+                },
+                {
+                    "question": "先にごはんを食べてください。わたしは*後で*食べます。",
+                    "answer1": "こうで",
+                    "answer2": "あとで",
+                    "answer3": "ごで",
+                    "answer4": "ので",
+                    "result": "2"
+                }
+            ]
+
+        },
+        {
+            "title": "huhu",
+            "content": "lolo",
+            "question": [
+                [{
+                        "question": "*先週*の木曜日　学校のとしょかんでレポートを書きました。",
+                        "answer1": "せんしゅ",
+                        "answer2": "さきしゅ",
+                        "answer3": "さきしゅう",
+                        "answer4": "せんしゅう",
+                        "result": "2"
+                    },
+                    {
+                        "question": "先にごはんを食べてください。わたしは*後で*食べます。",
+                        "answer1": "こうで",
+                        "answer2": "あとで",
+                        "answer3": "ごで",
+                        "answer4": "ので",
+                        "result": "2"
+                    }
+                ]
+            ]
+        }
+    ],
+    "listening": [
+        {},
+        {}
+    ]
+}
