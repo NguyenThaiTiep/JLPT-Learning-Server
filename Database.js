@@ -10,7 +10,6 @@ var pool = mysql.createPool({
 
 pool.getConnection(function(err, connection) {
     console.log(err);
-
     connection.destroy();
 });
 
