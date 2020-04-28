@@ -1,4 +1,3 @@
-const sql = require('mysql');
 var mysql = require('mysql');
 
 var pool = mysql.createPool({
