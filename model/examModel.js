@@ -20,6 +20,7 @@ module.exports.add = async(req, res) => {
     var id = exam.insertId;
     var grammar = await addGrammar(id);
     var reading = await addReading(id);
+    var listening = await addListening(id);
 
     function addGrammar(id) {
         var add = async(idQ) => {
@@ -100,9 +101,10 @@ module.exports.add = async(req, res) => {
         var add = async(idL) => {
             var listeningList = body.listening;
             row = 0;
+            if (listeningList.length === 0) return;
             while (listeningList[row]) {
                 var listening = listeningList[row];
-                var qr = "INSERT INTO examListening (`id`, `title`, `CodeExamL`, `imageUrl`,`audioUr`) VALUE(NULL,\'" +
+                var qr = "INSERT INTO examListening (`id`, `title`, `CodeExamL`, `imageUrl`,`audioUrl`) VALUE(NULL,\'" +
                     listening.title + "\',\'" +
                     id + "\'," +
                     "NULL, NULL" +
@@ -132,37 +134,11 @@ module.exports.add = async(req, res) => {
             }
         }
 
-
+        //hihi
         var b = add(id);
     }
 
-    // function uploadFile(file) {
-    //     var form = new formidable.IncomingForm();
-    //     form.uploadDir = "public/images";
-    //     form.keepExtensions = true;
-    //     form.maxFieldsSize = 10 * 1024 * 1024;
-    //     form.multiples = true;
-    //     form.parse((err, fields, files) => {
-    //         if (err) {
-    //             res.json({
-    //                 result: "failed",
-    //                 data: {},
-    //                 message: "Cannot upload image.error"
-    //             })
-    //             return;
-    //         }
-    //         var imgs = files[""];
 
-    //         var fileNames = [];
-
-    //         if (imgs.path) fileNames.push(imgs.path.split("\\").pop())
-    //         if (imgs.length >= 0) {
-    //             imgs.forEach(eachFile => {
-    //                 fileNames.push(eachFile.path.split("\\").pop())
-    //             });
-    //         }
-    //     })
-    // }
     res.sendStatus(200);
 }
 
