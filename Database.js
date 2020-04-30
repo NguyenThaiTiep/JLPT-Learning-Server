@@ -26,5 +26,5 @@ pool.getConnection(function(err, connection) {
 //     //nếu thành công
 //     console.log('connect database success');
 // });
-//hihi
+// /lelele
 module.exports = pool;

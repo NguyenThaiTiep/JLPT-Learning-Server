@@ -133,8 +133,6 @@ module.exports.add = async(req, res) => {
                 row++;
             }
         }
-
-        //hihi
         var b = add(id);
     }
 
