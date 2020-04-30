@@ -28,7 +28,7 @@ module.exports.add = async(req, res) => {
             row = 0;
             while (grammarList[row]) {
                 var grammar = grammarList[row];
-                var qr = "INSERT INTO examGrammar (`id`, `title`, `CodeExamG`) VALUE(NULL,\'" +
+                var qr = "INSERT INTO examgrammar (`id`, `title`, `CodeExamG`) VALUE(NULL,\'" +
                     grammar.title + "\',\'" +
                     id + "\'" +
                     ")";
@@ -39,7 +39,7 @@ module.exports.add = async(req, res) => {
                 var index = 0;
                 while (qs[index]) {
                     var questions = qs[index];
-                    var qr = "INSERT INTO examGrammarQuestion (`id`, `idGrammar`, `question`,`answer1`,`answer2`,`answer3`,`answer4`,`result`) VALUE(NULL,\'" +
+                    var qr = "INSERT INTO examgrammarquestion (`id`, `idGrammar`, `question`,`answer1`,`answer2`,`answer3`,`answer4`,`result`) VALUE(NULL,\'" +
                         idGrammarObject + "\',\'" +
                         questions.question + "\',\'" +
                         questions.answer1 + "\',\'" +
@@ -66,7 +66,7 @@ module.exports.add = async(req, res) => {
             console.log(readingList.length)
             while (readingList[row]) {
                 var reading = readingList[row];
-                var qr = "INSERT INTO examReading (`id`, `title`, `CodeExamR`, `content`) VALUE(NULL,\'" +
+                var qr = "INSERT INTO examreading (`id`, `title`, `CodeExamR`, `content`) VALUE(NULL,\'" +
                     reading.title + "\',\'" +
                     idR + "\',\'" +
                     reading.content + "\'" +
@@ -77,7 +77,7 @@ module.exports.add = async(req, res) => {
                 var index = 0;
                 while (qs[index]) {
                     var questions = qs[index];
-                    var qr = "INSERT INTO examReadingQuestion (`id`, `idReading`, `question`,`answer1`,`answer2`,`answer3`,`answer4`,`result`) VALUE(NULL,\'" +
+                    var qr = "INSERT INTO examreadingquestion (`id`, `idReading`, `question`,`answer1`,`answer2`,`answer3`,`answer4`,`result`) VALUE(NULL,\'" +
                         idReadingObject + "\',\'" +
                         questions.question + "\',\'" +
                         questions.answer1 + "\',\'" +
@@ -104,7 +104,7 @@ module.exports.add = async(req, res) => {
             if (listeningList.length === 0) return;
             while (listeningList[row]) {
                 var listening = listeningList[row];
-                var qr = "INSERT INTO examListening (`id`, `title`, `CodeExamL`, `imageUrl`,`audioUrl`) VALUE(NULL,\'" +
+                var qr = "INSERT INTO examlistening (`id`, `title`, `CodeExamL`, `imageUrl`,`audioUrl`) VALUE(NULL,\'" +
                     listening.title + "\',\'" +
                     id + "\'," +
                     "NULL, NULL" +
@@ -116,7 +116,7 @@ module.exports.add = async(req, res) => {
                 var index = 0;
                 while (qs[index]) {
                     var questions = qs[index];
-                    var qr = "INSERT INTO examListeningQuestion (`id`, `idListening`, `question`,`answer1`,`answer2`,`answer3`,`answer4`,`result`) VALUE(NULL,\'" +
+                    var qr = "INSERT INTO examlisteningquestion (`id`, `idListening`, `question`,`answer1`,`answer2`,`answer3`,`answer4`,`result`) VALUE(NULL,\'" +
                         idListeningObject + "\',\'" +
                         questions.question + "\',\'" +
                         questions.answer1 + "\',\'" +
@@ -133,21 +133,73 @@ module.exports.add = async(req, res) => {
                 row++;
             }
         }
-
-        //hihi
         var b = add(id);
     }
-
-
     res.sendStatus(200);
 }
 
-module.exports.remove = (req, res) => {
-
+module.exports.remove = async(req, res) => {
+    var body = req.body;
+    var id = body.id;
+    var qr = `DELETE FROM exam WHERE id = ${id} `
+    var result = await queryFunc(qr);
+    if (result.affectedRows == 0) res.send({ status: "fail", message: "not found" });
+    else res.send({ status: "ok", message: "deleted" });
 }
-module.exports.getAll = (req, res) => {
+module.exports.getAll = async(req, res) => {
+    var qr = 'SELECT * FROM exam';
+    var result = await queryFunc(qr);
 
+    res.send((result));
 }
-module.exports.getExamById = (req, res) => {
+module.exports.getExamById = async(req, res) => {
+    var id = req.params.id;
+    var examObject = {}
 
+    // get exam
+    var qr = `SELECT * FROM exam WHERE id = ${id}`
+    var exam = await queryFunc(qr);
+    if (exam.length == 0) res.send({ status: "fail", message: "not found" });
+
+    // get grammar exam
+    var qr = `SELECT * FROM examgrammar WHERE CodeExamG = ${id}`
+    var examGrammar = await queryFunc(qr);
+    getQuestion(examGrammar, "Grammar");
+
+    //get reading
+    var qr = `SELECT * FROM examreading WHERE CodeExamR = ${id}`
+    var examReading = await queryFunc(qr);
+    getQuestion(examReading, "Reading");
+
+    // get listening
+    var qr = `SELECT * FROM examlistening WHERE CodeExamL = ${id}`
+    var examListening = await queryFunc(qr);
+    getQuestion(examListening, "Listening");
+
+    examObject.id = id;
+    examObject.level = exam.level;
+
+    examObject.examGrammar = examGrammar;
+    examObject.examReading = examReading;
+    examObject.examListening = examListening;
+    res.send(examObject);
+
+
+    function getQuestion(ExamType, type) {
+        var getQuestionExam = async(part, typeLesson) => {
+            var idPart = part.id;
+            var idFK = `id${type}`
+            var nameTable = `exam${typeLesson}question`;
+
+            var qr = `SELECT * FROM ${nameTable} WHERE ${idFK} = ${idPart}`
+            var result = await queryFunc(qr);
+            part.question = result;
+            return part;
+        }
+        var typeLesson = type.toLowerCase();
+        ExamType.forEach(element => {
+            var a = getQuestionExam(element, typeLesson)
+        });
+        return;
+    }
 }
