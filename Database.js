@@ -11,5 +11,5 @@ pool.getConnection(function(err, connection) {
     console.log(err);
     connection.destroy();
 });
-
+//sao day
 module.exports = pool;
