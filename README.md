@@ -26,7 +26,8 @@
 1. POST : /file : upload 1 file
 2. GET: /file/:type/:name : lay 1 file có kiểu type(video/radio/image), và có tên name
 ### Exam
-1. GET : /exams/exam/:id : lấy exam có id là id
+1. GET : /exams/:id : lấy exam có id là id
 2. POST : /exams/add : tạo 1 exam mới
 3. DELETE : /exams/:id : xóa 1 exam có id là id
+4. GET : /exams : Lấy ra tất cả exam
 ### Admin

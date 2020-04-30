@@ -6,7 +6,7 @@ var isLogin = require('./../model/authModel').checkLogin;
 
 /* GET users listing. */
 router.get('/', isLogin, ExamsModel.getAll);
-router.get('/exam/:id', isLogin, ExamsModel.getExamById);
+router.get('/:id', isLogin, ExamsModel.getExamById);
 
 router.post('/add', isLogin, ExamsModel.add)
 router.delete('/id', isLogin, ExamsModel.remove)
