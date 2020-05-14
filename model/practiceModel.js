@@ -10,7 +10,10 @@ module.exports.getPracticeById = async(req, res) => {
     var level = req.params.level;
     var id = req.params.id;
 
-    if (levels.indexOf(level) == -1) res.send({ status: "fail", message: "level invalid" });
+    if (levels.indexOf(level) == -1) {
+        res.send({ status: "fail", message: "level invalid" });
+        return
+    };
     if (types.indexOf(type) == -1) res.send({ status: "fail", message: "type invalid" });
     else {
         var qr = "SELECT * FROM questionpractice" + type + " AS T WHERE  T.idRLG = \'" + id + "\'";
