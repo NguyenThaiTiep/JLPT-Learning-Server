@@ -19,10 +19,11 @@ module.exports.getPracticeById = async(req, res) => {
         return;
     };
     // var qr = "SELECT * FROM questionpractice" + type + " AS T WHERE  T.idRLG = \'" + id + "\'";
-    var qr = `SELECT * FROM questionpractice${type} AS Q 
+    var qr = `SELECT Q.id, Q.question, Q.answer1, Q.answer2, Q.answer3, Q.answer4, Q.result FROM questionpractice${type} AS Q 
                         LEFT JOIN ${type}practice AS T 
                         ON Q.idRLG = ${id}
                         WHERE T.id = ${id} AND T.level = '${level}'`;
+    console.log(qr);
     var practice = await queryFunc(qr);
     if (practice.length === 0) {
         res.send({ status: "fail", message: "Not Found practice" });
