@@ -14,12 +14,21 @@ module.exports.getPracticeById = async(req, res) => {
         res.send({ status: "fail", message: "level invalid" });
         return
     };
-    if (types.indexOf(type) == -1) res.send({ status: "fail", message: "type invalid" });
-    else {
-        var qr = "SELECT * FROM questionpractice" + type + " AS T WHERE  T.idRLG = \'" + id + "\'";
-        var practice = await queryFunc(qr);
-        res.send(practice);
+    if (types.indexOf(type) == -1) {
+        res.send({ status: "fail", message: "type invalid" })
+        return;
+    };
+    // var qr = "SELECT * FROM questionpractice" + type + " AS T WHERE  T.idRLG = \'" + id + "\'";
+    var qr = `SELECT * FROM questionpractice${type} AS Q 
+                        LEFT JOIN ${type}practice AS T 
+                        ON Q.idRLG = ${id}
+                        WHERE T.id = ${id} AND T.level = '${level}'`;
+    var practice = await queryFunc(qr);
+    if (practice.length === 0) {
+        res.send({ status: "fail", message: "Not Found practice" });
     }
+    res.send(practice);
+
 }
 module.exports.getAll = async(req, res) => {
     var type = req.params.type;
