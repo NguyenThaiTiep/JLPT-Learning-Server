@@ -63,7 +63,6 @@ module.exports.add = async(req, res) => {
         var add = async(idR) => {
             var readingList = body.reading;
             row = 0;
-            console.log(readingList.length)
             while (readingList[row]) {
                 var reading = readingList[row];
                 var qr = "INSERT INTO examreading (`id`, `title`, `CodeExamR`, `content`) VALUE(NULL,\'" +
@@ -71,8 +70,10 @@ module.exports.add = async(req, res) => {
                     idR + "\',\'" +
                     reading.content + "\'" +
                     ")";
+                console.log(qr)
                 var readingObject = await queryFunc(qr);
                 var idReadingObject = readingObject.insertId;
+
                 var qs = reading.question;
                 var index = 0;
                 while (qs[index]) {
@@ -92,6 +93,7 @@ module.exports.add = async(req, res) => {
                     index++;
                 }
                 row++;
+
             }
         }
         var b = add(id);
@@ -131,6 +133,7 @@ module.exports.add = async(req, res) => {
                     index++;
                 }
                 row++;
+
             }
         }
         var b = add(id);
